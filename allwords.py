@@ -26,7 +26,9 @@ def traverse(rwords, word, coord, previous):
     y = coord[1]
     word += the_grid[x][y]
     previous.append((x, y))
-    if word in rwords:
+    wordlen = len(word)
+    temp = [x for x in rwords if x[:wordlen] == word and len(x) >= wordlen]
+    if word in temp:
         found.add(word)
     adjacent = left | right | top | bottom
     if x == 0:
@@ -37,12 +39,11 @@ def traverse(rwords, word, coord, previous):
         adjacent -= top
     if y == 6:
         adjacent -= bottom
-    temp = [x for x in rwords if x[:len(word)] == word and len(x) >= len(word)]
     if len(temp) > 0:
         for coords in adjacent:
             newcoord = (x + coords[0], y + coords[1])
             if newcoord not in previous:
-                traverse(temp[:], word[:], newcoord[:], previous[:])
+                traverse(temp, word[:], newcoord[:], previous[:])
 
 for x in range(7):
     for y in range(7):
