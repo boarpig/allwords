@@ -11,11 +11,14 @@ bottom = set(((-1, 1), (0, 1), (1, 1)))
 consonants = "BBCCDDFFGGHHHJKLLMMNNNPPQRRRSSSTTTVVWWXZ"
 vowels = "AAAEEEIIIOOOUUYY"
 
-the_grid = [[], [], [], [], [], [], []]
+the_grid = []
 
-for x in range(7):
-    for y in range(7):
-        if (7 * y + x) % 2 == 0:
+side = 7
+
+for x in range(side):
+    the_grid.append([])
+    for y in range(side):
+        if (side * y + x) % 2 == 0:
             the_grid[x].append(choice(vowels))
         else:
             the_grid[x].append(choice(consonants))
@@ -27,17 +30,17 @@ def traverse(rwords, word, coord, previous):
     word += the_grid[x][y]
     previous.append((x, y))
     wordlen = len(word)
-    temp = [x for x in rwords if x[:wordlen] == word and len(x) >= wordlen]
+    temp = [n for n in rwords if n[:wordlen] == word and len(n) >= wordlen]
     if word in temp:
         found.add(word)
     adjacent = left | right | top | bottom
     if x == 0:
         adjacent -= left
-    if x == 6:
+    if x == side - 1:
         adjacent -= right
     if y == 0:
         adjacent -= top
-    if y == 6:
+    if y == side - 1:
         adjacent -= bottom
     if len(temp) > 0:
         for coords in adjacent:
@@ -45,8 +48,8 @@ def traverse(rwords, word, coord, previous):
             if newcoord not in previous:
                 traverse(temp, word[:], newcoord[:], previous[:])
 
-for x in range(7):
-    for y in range(7):
+for x in range(side):
+    for y in range(side):
         main = [word for word in words if word[0] == the_grid[x][y]]
         traverse(main[:], "", (x, y), [])
 
